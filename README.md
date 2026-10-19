@@ -10,14 +10,6 @@ Technologies: Python, OpenCV, MediaPipe (or dlib), NumPy, Jupyter.
 
 ## How it works
 
-```
-Input (video/camera frame)
-   -> face_detection.py   find face + eye/mouth landmarks
-   -> eye_detection.py    EAR (eye aspect ratio), eye-closed time, blink count
-   -> yawn_detection.py   MAR (mouth aspect ratio), yawn count
-   -> drowsiness.py       decision engine -> driver state
-   -> alert_system.py     beep + voice message + log file
-```
 
 | Signal | How it is measured | Alert rule (default) |
 |---|---|---|
@@ -30,20 +22,6 @@ All thresholds live in `DrowsinessConfig` (`drowsiness.py`).
 The first ~60 frames with a visible face are used to **calibrate** the driver's normal
 open-eye EAR (keep your eyes open at the start of the video).
 
-## Project structure
-
-```
-drowsy-driver-alert/
-├── main.py               pipeline + CLI + run() for Jupyter
-├── face_detection.py     MediaPipe / dlib landmark backends
-├── eye_detection.py      EAR, blink monitor
-├── drowsiness.py         DrowsinessDetector, DriverState, config
-├── yawn_detection.py     MAR, yawn monitor
-├── alert_system.py       beep, voice, cooldown, logging
-├── test_cases.py         unit tests (no camera needed)
-├── requirements.txt
-├── README.md
-└── run_in_jupyter.ipynb  ready-made notebook (extra)
 ```
 
 ## IBM LinuxONE (s390x) notes — please read
@@ -72,23 +50,6 @@ drowsy-driver-alert/
 1. Copy the whole `drowsy-driver-alert/` folder to your LinuxONE Jupyter environment.
 2. Open `run_in_jupyter.ipynb` (or create cells yourself):
 
-```python
-!pip install -r requirements.txt          # or install packages as described above
-!python -m unittest test_cases -v         # 16 tests, should all pass
-
-from main import run
-summary = run("driver_video.mp4",         # your uploaded video
-              output_path="annotated.avi",
-              display_every=10)           # show every 10th frame inside the notebook
-summary
-```
-
-## Run from terminal
-
-```bash
-python main.py --source driver_video.mp4 --output annotated.avi
-python main.py --source 0                 # local webcam (not available on a server)
-```
 
 ## Tuning
 
